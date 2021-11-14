@@ -349,7 +349,89 @@ This method should also display how much each player won or lost in this round.*
       
    }// end of checkWinner method hard mode
    
-   
+   //------------------------------------7-------------------------
+
+        while (true) {
+            /*Ask the player to enter his or her guess. Assign the input to his or her guess field. 
+            Your program should not accept the input if it is not in the range of 2 and 12. */
+            System.out.println("Enter your guess between 2 and 12: ");
+            int guess = scanner.nextInt();
+            if (guess >= 2 && guess <= 12) {
+                player.setGuess(guess);
+                break;
+            } else {
+                System.out.println("Entered number not in the range from 2 to 12: ");
+            }
+        }
+    }
+
+/*This method find out if any player correctly guessed the outcome and update each player’s balance 
+and the balance of the pot accordingly.  
+          
+This method should also display how much each player won or lost in this round.*/    
+    public void checkWinner(int outcome) {
+
+        //keep track of # players correct
+        int playerCorrect = 0;
+
+         
+        for (int i = 0; i < players.length; i++) {
+            if (players[i].getGuess() == outcome) {
+                playerCorrect++;
+            }
+        }
+
+        if (playerCorrect == 0) {
+            System.out.println("Nobody won");  }
+
+        
+        if (playerCorrect == 1) {
+            for (int i = 0; i < players.length; i++) {
+                if (players[i].getGuess() == outcome) {
+                    players[i].setBalance(players[i].getBalance() + this.pot);
+                    this.pot = 0;
+                    break;
+                }
+            }// end for 
+        }//end if (playerCorrect==1)
+
+        if (playerCorrect > 1) {
+            int hightBet = 0;
+            int highestBetAmount = 0;
+            
+            // get the highest Bet Amount
+            for (int i = 0; i < players.length; i++) {
+                if (players[i].getBetAmount() > highestBetAmount) {
+                    highestBetAmount = players[i].getBetAmount();
+                } //end if
+            } //end for
+
+             // count how many players have the highest Bet Amount  
+            for (int i = 0; i < players.length; i++) {
+                if (players[i].getBetAmount() == highestBetAmount) {
+                    hightBet++;
+                }// end if
+            }// end for
+
+            if (highestBetAmount >= 1) {
+                for (int i = 0; i < players.length; i++) {
+                    if (players[i].getBetAmount() == highestBetAmount) {
+                        players[i].setBalance(players[i].getBalance() + (this.pot / highestBetAmount));
+                    }
+                }// end for
+                this.pot = 0;
+            } //end if
+        }// end if (playerrCorrect>1)
+        
+        //Printing result after each round for each player
+        for (int i = 0; i < players.length; i++) {
+            if (players[i].getGuess() == outcome) {
+                System.out.println(players[i].getName() + " won. Your balance is $" + players[i].getBalance());
+            } else {
+                System.out.println(players[i].getName() + " your lost is: $" + players[i].getBetAmount());
+            }
+        }
+    }
    
    
    
